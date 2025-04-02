@@ -9,8 +9,6 @@ const ThemeSwitcher = () => {
   useEffect(() => {
     const localTheme = localStorage.getItem("theme");
     document.documentElement.className = `theme-${localTheme}`;
-    console.log(localTheme);
-    console.log(theme);
   }, [theme]);
 
   const handleTheme = (value: Theme) => {
@@ -20,25 +18,25 @@ const ThemeSwitcher = () => {
   };
 
   return (
-    <div className="flex flex-col gap-y-5 justify-center">
+    <div className="flex text-text flex-col gap-y-5 justify-center">
       <button
         onClick={() => setIsDropDownOpen((state) => !state)}
-        className="cursor-pointer bg-secondary hover:rotate-180 transition-all duration-500 self-end"
+        className="btn hover:rotate-180  self-end"
       >
-        icon
+        change theme
       </button>
       {isDropDownOpen && (
         <div className="flex flex-col gap-y-3 capitalize max-w-sm items-center justify-centers">
-          <button className="" onClick={() => handleTheme("light")}>
+          <button className="btn" onClick={() => handleTheme("light")}>
             Light Theme
           </button>
-          <button className="" onClick={() => handleTheme("dark")}>
+          <button className="btn" onClick={() => handleTheme("dark")}>
             Dark Theme
           </button>
-          <button className="" onClick={() => handleTheme("red")}>
+          <button className="btn" onClick={() => handleTheme("red")}>
             Red Theme
           </button>
-          <button className="" onClick={() => handleTheme("blue")}>
+          <button className="btn" onClick={() => handleTheme("blue")}>
             Blue Theme
           </button>
         </div>

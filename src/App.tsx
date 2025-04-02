@@ -1,10 +1,14 @@
-import ThemeSwitcher from "./ThemeSwitcher";
+import Form from "./components/Form";
+import ThemeSwitcher from "./components/ThemeSwitcher";
+import UserProfile from "./components/UserProfile";
 
 function App() {
   return (
-    <div className="font-space-grotesk bg-primary min-h-dvh min-w-dvw">
+    <div className="font-space-grotesk text-text bg-background min-h-dvh p-3 md:p-6 mx-auto max-w-7xl flex flex-col gap-y-5">
       <ThemeSwitcher />
-      <span className="bg-background text-4xl text-text">this is a text</span>
+      <header className="text-3xl text-center">Github Profile Finder</header>
+      <Form />
+      <UserProfile />
     </div>
   );
 }

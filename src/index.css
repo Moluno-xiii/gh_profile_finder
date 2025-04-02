@@ -7,10 +7,7 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  --color-primary: #00cc99;
-  --color-secondary: #07373f;
-  --color-text: #02191d;
-  --color-background: #ffffff;
+  background-color: var(--color-background);
   --radius: 0.6rem;
 }
 
@@ -48,7 +45,7 @@
 .theme-light {
   --color-primary: #007a67;
   --color-secondary: #1c4a52;
-  --color-text: #2a2e35;
+  --color-text: #848181;
   --color-background: #f8f9fa;
 }
 
@@ -64,4 +61,10 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer {
+  .btn {
+    @apply rounded-md bg-secondary px-4 py-2 hover:bg-secondary/70 transition-all duration-200 cursor-pointer capitalize;
+  }
 }
