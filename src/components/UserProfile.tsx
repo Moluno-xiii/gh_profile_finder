@@ -18,18 +18,25 @@ const UserProfile: React.FC = () => {
       {data.login ? (
         <ul className="flex flex-col gap-y-3">
           <li className="flex flex-row justify-between items-center">
-            <span className="text-3xl capitalize">{data.login}</span>
+            <span
+              aria-label="user's github username"
+              className="text-3xl capitalize"
+            >
+              {data.login}
+            </span>
             <img
+              aria-label="user avatar"
               src={data.avatar_url}
               className="rounded-full size-24"
-              alt=""
+              alt="User's github avatar"
             />
           </li>
-          <li>Bio : {data.bio || "No Bio"}</li>
-          <li>
+          <li aria-label="user bio">Bio : {data.bio || "No Bio"}</li>
+          <li aria-label="user blog">
             Blog :{" "}
             {data.blog ? (
               <a
+                aria-label="user blog url"
                 href={data.blog}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -41,43 +48,62 @@ const UserProfile: React.FC = () => {
               "No blog url"
             )}
           </li>
-          <li>Name : {data.name || "No display name"}</li>
-          <li>Followers : {data.followers}</li>
-          <li>Following : {data.following}</li>
-          <li>
+          <li aria-label="User display name">
+            Name : {data.name || "No display name"}
+          </li>
+          <li aria-label="Number of user's followers">
+            Followers : {data.followers}
+          </li>
+          <li aria-label="Number of user's following">
+            Following : {data.following}
+          </li>
+          <li aria-label="user profile">
             Profile URL :{" "}
             <a
               href={data.html_url}
               target="_blank"
               rel="noopener noreferrer"
               className="underline"
+              aria-label="usr profile url"
             >
               {data.html_url}
             </a>
           </li>
-          <li>Created At : {date.toDateString()}</li>
-          <li>
+          <li aria-label="Date account was created">
+            Created At : {date.toDateString()}
+          </li>
+          <li aria-label="User email">
             Email:{" "}
-            <a href={data.email ? `mailto:${data.email}` : "#"}>
+            <a
+              aria-label="user email url"
+              href={data.email ? `mailto:${data.email}` : "#"}
+            >
               {data.email || "Empty"}
             </a>
           </li>
-          <li>Company : {data.company || "Empty"}</li>
-          <li>Location : {data.location || "Empty"}</li>
-          <button
-            className="self-end btn"
-            onClick={() => handleDisplayRepositories(data.login)}
-          >
-            {isLoading
-              ? "Loading repository data..."
-              : " View all public repositories"}
-          </button>
+          <li aria-label="user's company">
+            Company : {data.company || "Empty"}
+          </li>
+          <li aria-label="user's location">
+            Location : {data.location || "Empty"}
+          </li>
+          {repositoryData === null && (
+            <button
+              className="self-end btn"
+              onClick={() => handleDisplayRepositories(data.login)}
+              aria-label="Load repository data button"
+            >
+              {isLoading
+                ? "Loading repository data..."
+                : " View all public repositories"}
+            </button>
+          )}
         </ul>
       ) : (
         <span>Enter user name to fetch user data.</span>
       )}
       {repositoryData !== null && displayRepositories && (
-        <div>
+        <div className="mt-6">
           <RepositoryData />
         </div>
       )}

@@ -3,6 +3,7 @@ import {
   createContext,
   PropsWithChildren,
   useContext,
+  useEffect,
   useReducer,
 } from "react";
 
@@ -18,15 +19,19 @@ interface ContextValues {
   repositoryData: any;
   errorMessage: string;
   isLoading: boolean;
+  page_number: number;
   fetchUserData: (event: React.FormEvent<HTMLFormElement>) => void;
   fetchRepositoryData: (userName: string) => void;
+  handlePageNumber: (number: number) => void;
 }
 
 const ProfileContext = createContext<ContextValues>({
   data: {},
   repositoryData: [],
+  page_number: 1,
   fetchUserData: () => {},
   fetchRepositoryData: () => {},
+  handlePageNumber: () => {},
   errorMessage: "",
   isLoading: false,
 });
@@ -36,19 +41,22 @@ interface State {
   isLoading: boolean;
   data: any;
   repositoryData: any;
+  page_number: number;
 }
 
 type Actions =
   | { type: "SET_ERROR"; payload: string }
   | { type: "SET_LOADING"; payload: boolean }
   | { type: "SET_USER_DATA"; payload: boolean }
-  | { type: "SET_REPO_DATA"; payload: any };
+  | { type: "SET_REPO_DATA"; payload: any }
+  | { type: "SET_PAGE_NUMBER"; payload: number };
 
 const initialState: State = {
   errorMessage: "",
   isLoading: false,
   data: {},
   repositoryData: null,
+  page_number: 1,
 };
 
 function reducer(state: State, action: Actions): State {
@@ -62,11 +70,17 @@ function reducer(state: State, action: Actions): State {
         ...state,
         data: action.payload,
         repositoryData: null,
+        page_number: 1,
       };
     case "SET_REPO_DATA":
       return {
         ...state,
         repositoryData: action.payload,
+      };
+    case "SET_PAGE_NUMBER":
+      return {
+        ...state,
+        page_number: state.page_number + action.payload,
       };
     default:
       return state;
@@ -74,8 +88,10 @@ function reducer(state: State, action: Actions): State {
 }
 
 const ProfileContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const [{ errorMessage, isLoading, data, repositoryData }, dispatch] =
-    useReducer(reducer, initialState);
+  const [
+    { errorMessage, isLoading, data, repositoryData, page_number },
+    dispatch,
+  ] = useReducer(reducer, initialState);
 
   async function fetchUserData(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -133,7 +149,7 @@ const ProfileContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
     try {
       const response = await fetch(
-        `${api_url}/users/${userName}/repos`,
+        `${api_url}/users/${userName}/repos?page=${page_number}`,
         requestOptions
       );
       if (!response.ok) {
@@ -151,11 +167,21 @@ const ProfileContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     }
   }
 
+  useEffect(() => {
+    fetchRepositoryData(data.login);
+  }, [page_number]);
+
+  function handlePageNumber(number: number) {
+    dispatch({ type: "SET_PAGE_NUMBER", payload: number });
+  }
+
   return (
     <ProfileContext.Provider
       value={{
         fetchUserData,
         fetchRepositoryData,
+        handlePageNumber,
+        page_number,
         data,
         repositoryData,
         errorMessage,
